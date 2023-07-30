@@ -6,18 +6,18 @@ import (
 	"strconv"
 )
 
+// GetCitiesAll - get full list of cities for region
 func (c *Client) GetCitiesAll(filters map[string]string) ([]City, error) {
-
 	size := 500
 	page := 0
 
-	var err error
+	var mainErr error
 	var res []City
 	for {
 		cities, err := c.GetCities(filters, size, page)
 		res = append(res, cities...)
 		if err != nil || len(cities) < size {
-			err = err
+			mainErr = err
 			break
 		}
 		if page <= 100 {
@@ -25,9 +25,10 @@ func (c *Client) GetCitiesAll(filters map[string]string) ([]City, error) {
 		}
 		page++
 	}
-	return res, err
+	return res, mainErr
 }
 
+// GetCities - get list of cities for region
 func (c *Client) GetCities(filters map[string]string, size, page int) ([]City, error) {
 
 	method := "location/cities?"
@@ -43,7 +44,7 @@ func (c *Client) GetCities(filters map[string]string, size, page int) ([]City, e
 	var errorsRes *ErrorsSDK
 	_, err := c.get(method+vs.Encode(), &cities, &errorsRes)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = errorsRes

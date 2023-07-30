@@ -1,4 +1,4 @@
-package go_sdk_cargo_sdek
+package sdek
 
 import "strings"
 

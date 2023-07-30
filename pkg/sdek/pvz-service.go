@@ -1,4 +1,4 @@
-package go_sdk_cargo_sdek
+package sdek
 
 import (
 	"net/url"
@@ -68,7 +68,7 @@ func (c *Client) GetPVZs(filters map[string]string) ([]PVZ, error) {
 	var errorsRes *ErrorsSDK
 	_, err := c.get(method+vs.Encode(), &pvzs, &errorsRes)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = errorsRes

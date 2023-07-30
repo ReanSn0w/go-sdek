@@ -1,4 +1,4 @@
-package go_sdk_cargo_sdek
+package sdek
 
 // https://confluence.cdek.ru/pages/viewpage.action?pageId=29923926
 
@@ -11,7 +11,7 @@ func (c *Client) OrderCreate(orderReq OrderReq) (*OrderRes, error) {
 	var orderErr *OrderRes
 	_, err = c.post(method, orderReq, &orderRes, &orderErr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	var errs ErrorsSDK
@@ -34,7 +34,7 @@ func (c *Client) OrderInfoByUUID(uuid string) (*Order, error) {
 	var orderErr *OrderRes
 	_, err := c.get(method, &orderRes, &orderErr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return orderRes.Entity, err
@@ -46,7 +46,7 @@ func (c *Client) OrderInfoByN(uuid string) (*Order, error) {
 	var orderErr *OrderRes
 	_, err := c.get(method, &orderRes, &orderErr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return orderRes.Entity, err
@@ -58,7 +58,7 @@ func (c *Client) OrderInfoByIM(uuid string) (*Order, error) {
 	var orderErr *OrderRes
 	_, err := c.get(method, &orderRes, &orderErr)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return orderRes.Entity, err

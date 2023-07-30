@@ -22,26 +22,22 @@ func (c *Client) TokenRefresh() error {
 
 	req, err := http.NewRequest(http.MethodPost, c.endPoint+method, strings.NewReader(vs.Encode()))
 	if err != nil {
-		panic(err)
+		return err
 	}
 	req.Header.Set("Accept", "application/json;charset=utf-8")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
-	if c.DEBUG {
-		reqDump, _ := httputil.DumpRequest(req, true)
-		log.Printf("[D] REQ:\n%s\n\n", string(reqDump))
-	}
+	reqDump, _ := httputil.DumpRequest(req, true)
+	c.logger.Logf("[DEBUG] REQ:\n%s\n\n", string(reqDump))
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer func() { _ = res.Body.Close() }()
 
-	if c.DEBUG {
-		resDump, _ := httputil.DumpResponse(res, true)
-		log.Printf("[D] RES:\n%s\n\n", string(resDump))
-	}
+	resDump, _ := httputil.DumpResponse(res, true)
+	log.Printf("[DEBUG] RES:\n%s\n\n", string(resDump))
 
 	body, _ := io.ReadAll(res.Body)
 	var token TokenRes
@@ -50,13 +46,13 @@ func (c *Client) TokenRefresh() error {
 	if res.StatusCode == 200 {
 		err = json.Unmarshal(body, &token)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		c.token = token.AccessToken
 	} else {
 		err = json.Unmarshal(body, &tokenErr)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 

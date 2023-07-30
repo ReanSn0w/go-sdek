@@ -1,4 +1,4 @@
-package go_sdk_cargo_sdek
+package sdek
 
 import (
 	"net/url"
@@ -11,13 +11,13 @@ func (c *Client) GetRegionsAll(filters map[string]string) ([]Region, error) {
 	size := 1000
 	page := 0
 
-	var err error
+	var mainErr error
 	var res []Region
 	for {
 		regions, err := c.GetRegions(filters, size, page)
 		res = append(res, regions...)
 		if err != nil || len(regions) < size {
-			err = err
+			mainErr = err
 			break
 		}
 		if page <= 100 {
@@ -25,7 +25,7 @@ func (c *Client) GetRegionsAll(filters map[string]string) ([]Region, error) {
 		}
 		page++
 	}
-	return res, err
+	return res, mainErr
 }
 
 func (c *Client) GetRegions(filters map[string]string, size, page int) ([]Region, error) {
@@ -43,7 +43,7 @@ func (c *Client) GetRegions(filters map[string]string, size, page int) ([]Region
 	var errorsRes *ErrorsSDK
 	_, err := c.get(method+vs.Encode(), &regions, &errorsRes)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	err = errorsRes

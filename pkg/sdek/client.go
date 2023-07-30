@@ -1,73 +1,40 @@
-package go_sdk_cargo_sdek
-
-import "os"
+package sdek
 
 const (
 	ENDPOINT      = "https://api.cdek.ru/v2/"
 	ENDPOINT_TEST = "https://api.edu.cdek.ru/v2/"
-
-	LOG_DIR = "./logs/"
 )
 
 type (
 	Client struct {
-		DEBUG    bool
 		auth     *auth
 		endPoint string
 		token    string
+		logger   Logger
 	}
+
 	auth struct {
 		clientId     string
 		clientSecret string
 	}
+
+	Logger interface {
+		Logf(format string, args ...interface{})
+	}
 )
 
-type ServiceСonfigurator interface {
-	SetDebugMode(mode bool)
-	SetAuth(clientId, clientSecret string)
+// NewClient returns a new CDEK API client.
+func NewClient(logger Logger, clientId, clientSecret string) (*Client, error) {
+	return newClient(ENDPOINT, clientId, clientSecret)
 }
 
-type ServiceProvider interface {
-	ServiceСonfigurator
-
-	TokenRefresh() error
-
-	// Catalogs
-	GetRegions(filters map[string]string, size, page int) ([]Region, error)
-	GetRegionsAll(filters map[string]string) ([]Region, error)
-	GetCities(filter map[string]string, size, page int) ([]City, error)
-	GetCitiesAll(filter map[string]string) ([]City, error)
-	GetPVZs(filters map[string]string) ([]PVZ, error)
-
-	// Order
-	OrderCreate(orderReq OrderReq) (*OrderRes, error)
-	OrderInfoByUUID(uuid string) (*Order, error)
-	OrderInfoByN(n string) (*Order, error)
-	OrderInfoByIM(im string) (*Order, error)
-}
-
-func NewClient(clientId, clientSecret string) ServiceProvider {
-	client := newClient(ENDPOINT, clientId, clientSecret)
-	return client
-}
-
-func NewClientTest() ServiceProvider {
-
+// NewClientTest returns a new CDEK API client for test.
+func NewClientTest(logger Logger) (*Client, error) {
 	clientId, clientSecret := "epT5FMOa7IwjjlwTc1gUjO1GZDH1M1rE", "cYxOu9iAMZYQ1suEqfEvsHld4YQzjY0X"
-
-	client := newClient(ENDPOINT_TEST, clientId, clientSecret)
-	client.SetDebugMode(true)
-
-	err := client.TokenRefresh()
-	if err != nil {
-		panic(err)
-	}
-
-	return client
+	return newClient(ENDPOINT_TEST, clientId, clientSecret)
 }
 
-func newClient(ENDPOINT, clientId, clientSecret string) ServiceProvider {
-
+func newClient(ENDPOINT, clientId, clientSecret string) (*Client, error) {
 	client := &Client{
 		endPoint: ENDPOINT,
 		auth: &auth{
@@ -77,25 +44,5 @@ func newClient(ENDPOINT, clientId, clientSecret string) ServiceProvider {
 	}
 
 	err := client.TokenRefresh()
-	if err != nil {
-		panic(err)
-	}
-
-	return client
-}
-
-func (c *Client) SetDebugMode(mode bool) {
-	c.DEBUG = mode
-
-	if c.DEBUG {
-		err := os.MkdirAll(LOG_DIR, 0666)
-		if err != nil {
-			panic(err)
-		}
-	}
-}
-
-func (c *Client) SetAuth(clientId, clientSecret string) {
-	c.auth.clientId = clientId
-	c.auth.clientSecret = clientSecret
+	return client, err
 }
