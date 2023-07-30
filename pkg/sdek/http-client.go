@@ -40,7 +40,7 @@ func (c *Client) res(code int, body []byte, res, resErr interface{}) (int, error
 		if err != nil {
 			return 0, err
 		}
-		c.log.Logf("[ERROR] client.POST", string(body))
+		c.logger.Logf("[ERROR] client.POST", string(body))
 		return code, nil
 	}
 }
