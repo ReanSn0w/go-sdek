@@ -1,3 +1,3 @@
-module github.com/lanzay/go-sdk-cargo-sdek
+module github.com/ReanSn0w/go-sdek
 
-go 1.17
+go 1.20
