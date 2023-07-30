@@ -1,8 +1,10 @@
-package go_sdk_cargo_sdek
+package sdek_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/ReanSn0w/go-sdek/pkg/sdek"
 )
 
 func Test_OrderCreate(t *testing.T) {
@@ -28,18 +30,18 @@ func TestClient_OrderInfoByUUID(t *testing.T) {
 	fmt.Printf("[D] %v", order)
 }
 
-var orderTestOk = OrderReq{
+var orderTestOk = sdek.OrderReq{
 	Type:    1,
 	Number:  "N-001",
 	Comment: "коммент 1",
-	DeliveryRecipientCost: DeliveryRecipientCost{
+	DeliveryRecipientCost: sdek.DeliveryRecipientCost{
 		Value: 123,
 	},
-	DeliveryRecipientCostAdv: []DeliveryRecipientCostAdv{{
+	DeliveryRecipientCostAdv: []sdek.DeliveryRecipientCostAdv{{
 		Sum:       112,
 		Threshold: 10,
 	}},
-	FromLocation: LocationOrder{
+	FromLocation: sdek.LocationOrder{
 		Code:        "44",
 		FiasGUID:    "",
 		PostalCode:  "",
@@ -52,7 +54,7 @@ var orderTestOk = OrderReq{
 		KladrCode:   "",
 		Address:     "пр. Ленинградский, д.4",
 	},
-	ToLocation: LocationOrder{
+	ToLocation: sdek.LocationOrder{
 		Code:        "270",
 		FiasGUID:    "",
 		PostalCode:  "",
@@ -65,13 +67,13 @@ var orderTestOk = OrderReq{
 		KladrCode:   "",
 		Address:     "ул. Блюхера, 32",
 	},
-	Packages: []Package{{
+	Packages: []sdek.Package{{
 		Number:  "Упаковка 1",
 		Comment: "Коммент упаковки 1",
 		Height:  234,
-		Items: []Item{{
+		Items: []sdek.Item{{
 			WareKey: "ART-001",
-			Payment: DeliveryRecipientCost{Value: 123.12},
+			Payment: sdek.DeliveryRecipientCost{Value: 123.12},
 			Name:    "Товар 1",
 			Cost:    100,
 			Amount:  1,
@@ -82,11 +84,11 @@ var orderTestOk = OrderReq{
 		Weight: 0,
 		Width:  0,
 	}},
-	Recipient: Recipient{
+	Recipient: sdek.Recipient{
 		Name:   "Получатель 1",
-		Phones: []Phone{{Number: "+79134637228"}},
+		Phones: []sdek.Phone{{Number: "+79134637228"}},
 	},
-	Sender:     Sender{Name: "Отправитель 1"},
-	Services:   []Service{{Code: "SECURE_PACKAGE_A2"}},
+	Sender:     sdek.Sender{Name: "Отправитель 1"},
+	Services:   []sdek.Service{{Code: "SECURE_PACKAGE_A2"}},
 	TariffCode: 139,
 }

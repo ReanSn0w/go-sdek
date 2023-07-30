@@ -1,8 +1,12 @@
-package go_sdk_cargo_sdek
+package sdek_test
 
-import "testing"
+import (
+	"testing"
 
-var client = NewClientTest()
+	"github.com/ReanSn0w/go-sdek/pkg/sdek"
+)
+
+var client = sdek.NewClientTest()
 
 func TestNewClient(t *testing.T) {
 
