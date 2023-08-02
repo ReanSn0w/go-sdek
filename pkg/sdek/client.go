@@ -25,18 +25,19 @@ type (
 
 // NewClient returns a new CDEK API client.
 func NewClient(logger Logger, clientId, clientSecret string) (*Client, error) {
-	return newClient(ENDPOINT, clientId, clientSecret)
+	return newClient(logger, ENDPOINT, clientId, clientSecret)
 }
 
 // NewClientTest returns a new CDEK API client for test.
 func NewClientTest(logger Logger) (*Client, error) {
 	clientId, clientSecret := "epT5FMOa7IwjjlwTc1gUjO1GZDH1M1rE", "cYxOu9iAMZYQ1suEqfEvsHld4YQzjY0X"
-	return newClient(ENDPOINT_TEST, clientId, clientSecret)
+	return newClient(logger, ENDPOINT_TEST, clientId, clientSecret)
 }
 
-func newClient(ENDPOINT, clientId, clientSecret string) (*Client, error) {
+func newClient(logger Logger, ENDPOINT, clientId, clientSecret string) (*Client, error) {
 	client := &Client{
 		endPoint: ENDPOINT,
+		logger:   logger,
 		auth: &auth{
 			clientId:     clientId,
 			clientSecret: clientSecret,
