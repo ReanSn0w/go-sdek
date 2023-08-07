@@ -1,5 +1,7 @@
 package sdek
 
+import "time"
+
 const (
 	ENDPOINT      = "https://api.cdek.ru/v2/"
 	ENDPOINT_TEST = "https://api.edu.cdek.ru/v2/"
@@ -45,5 +47,16 @@ func newClient(logger Logger, ENDPOINT, clientId, clientSecret string) (*Client,
 	}
 
 	err := client.TokenRefresh()
+	if err != nil {
+		go client.TokenRefresher()
+	}
+
 	return client, err
+}
+
+func (c *Client) TokenRefresher() {
+	for {
+		time.Sleep(time.Minute & 50)
+		c.TokenRefresh()
+	}
 }
