@@ -77,10 +77,11 @@ type (
 		Type                     int                        `json:"type"`
 		Number                   string                     `json:"number"`
 		Comment                  string                     `json:"comment"`
+		DeliveryPoint            string                     `json:"delivery_point,omitempty"`
 		DeliveryRecipientCost    DeliveryRecipientCost      `json:"delivery_recipient_cost"`
 		DeliveryRecipientCostAdv []DeliveryRecipientCostAdv `json:"delivery_recipient_cost_adv"`
 		FromLocation             LocationOrder              `json:"from_location"`
-		ToLocation               LocationOrder              `json:"to_location"`
+		ToLocation               *LocationOrder             `json:"to_location,omitempty"`
 		Packages                 []Package                  `json:"packages"`
 		Recipient                Recipient                  `json:"recipient"`
 		Sender                   Sender                     `json:"sender"`

@@ -54,7 +54,7 @@ var orderTestOk = sdek.OrderReq{
 		KladrCode:   "",
 		Address:     "пр. Ленинградский, д.4",
 	},
-	ToLocation: sdek.LocationOrder{
+	ToLocation: &sdek.LocationOrder{
 		Code:        "270",
 		FiasGUID:    "",
 		PostalCode:  "",
