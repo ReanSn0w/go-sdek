@@ -42,6 +42,10 @@ func (c *Client) OrderInfoByUUID(uuid string) (*Order, error) {
 		return nil, err
 	}
 
+	if orderRes == nil {
+		return nil, ErrOrderNotFound
+	}
+
 	if orderRes.Entity == nil {
 		return nil, ErrOrderNotFound
 	}
@@ -58,6 +62,10 @@ func (c *Client) OrderInfoByN(uuid string) (*Order, error) {
 		return nil, err
 	}
 
+	if orderRes == nil {
+		return nil, ErrOrderNotFound
+	}
+
 	if orderRes.Entity == nil {
 		return nil, ErrOrderNotFound
 	}
@@ -72,6 +80,10 @@ func (c *Client) OrderInfoByIM(uuid string) (*Order, error) {
 	_, err := c.get(method, &orderRes, &orderErr)
 	if err != nil {
 		return nil, err
+	}
+
+	if orderRes == nil {
+		return nil, ErrOrderNotFound
 	}
 
 	if orderRes.Entity == nil {
