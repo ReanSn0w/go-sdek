@@ -1,6 +1,10 @@
 package sdek
 
-import "time"
+import (
+	"time"
+
+	"github.com/ReanSn0w/go-sdek/pkg/tools"
+)
 
 const (
 	ENDPOINT      = "https://api.cdek.ru/v2/"
@@ -13,6 +17,7 @@ type (
 		endPoint string
 		token    string
 		logger   Logger
+		cycle    *tools.CycleTask
 	}
 
 	auth struct {
@@ -47,8 +52,13 @@ func newClient(logger Logger, ENDPOINT, clientId, clientSecret string) (*Client,
 	}
 
 	err := client.TokenRefresh()
+
+	client.cycle = tools.NewCycleTask(func() {
+		client.TokenRefresh()
+	})
+
 	if err != nil {
-		go client.TokenRefresher()
+		client.cycle.Run(time.Minute * 30)
 	}
 
 	return client, err
