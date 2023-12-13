@@ -52,21 +52,14 @@ func newClient(logger Logger, ENDPOINT, clientId, clientSecret string) (*Client,
 	}
 
 	err := client.TokenRefresh()
+	if err != nil {
+		return nil, err
+	}
 
 	client.cycle = tools.NewCycleTask(func() {
 		client.TokenRefresh()
 	})
 
-	if err != nil {
-		client.cycle.Run(time.Minute * 30)
-	}
-
-	return client, err
-}
-
-func (c *Client) TokenRefresher() {
-	for {
-		time.Sleep(time.Minute & 50)
-		c.TokenRefresh()
-	}
+	client.cycle.Run(time.Minute * 30)
+	return client, nil
 }
